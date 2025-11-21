@@ -1893,8 +1893,8 @@ All other modes are assumed to be minor modes or unimportant.
   :custom-face
   (dashboard-banner-logo-title ((t (:height 2.0 :weight ultra-heavy :inherit (variable-pitch)))))
   :custom
-  (dashboard-banner-logo-title "Visual Emacs Studio\n(Community Edition)")
-  (dashboard-footer-messages '("Free Edition, Get the Enterprise Edition for $999"))
+  (dashboard-banner-logo-title "Ergomacs")
+  (dashboard-footer-messages '("A classic editor for modern minds"))
   (dashboard-startup-banner
    `(,(concat user-emacs-directory "assets/splash.svg") .
      ,(concat dashboard-banners-directory "4.txt")))

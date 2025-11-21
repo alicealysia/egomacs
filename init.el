@@ -41,6 +41,7 @@
 (global-set-key [tab-line drag-mouse-1] #'mouse-drag-tab-line)
 (use-package popwin)
 (popwin-mode 1)
+(scroll-bar-mode -1)
 ;; tab killer
 (define-advice tab-line-close-tab (:override (&optional e))
   "Close the selected tab."
