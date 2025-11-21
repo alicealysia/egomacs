@@ -1,144 +1,14 @@
-#+TITLE: Visual Emacs - a template configuration for a VSCode-like appearence
-#+AUTHOR: Elijah Gabe P.
-#+OPTIONS: num:nil
-
-#+html: <img src="./assets/README_images/README_SPLASH.svg" align="center" width="60%">
-
-[[./assets/README_images/screenshot.png]]
-
-#+html: <img src="./assets/README_images/wtf.jpg" align="left" width="25%">
-
-Visual Emacs is a configuration template that gives you a VSCode-like look,
-This configuration can be useful for VSCode refugees who want to use GNU Emacs without
-having to spend a lot of time configuring and feel comfortable with a similar interface.
-
-For users who want to have most of the features of VSCode, can check all
-the packages offered by this [[https://github.com/emacs-vs][repository]].
-
-*Note: this configuration It's intended to copy and paste*
-*the code you like into your own setup, whether it's Doom,*
-*Spacemacs, or your own (Vanilla). This setting is not*
-*guaranteed to work 100%*
-
-*Feel free to copy whatever you want!*
-
-** Requirements
-
-- a nerd-font installed /(This configuration uses
-  Inconsolata, you can change it to the one you prefer.)/
-
-- latest emacs version (better if nightly)
-
-- a config file to where paste these snippets (optional)
-
-* Firsts lines (init.el)
-
-NOTE: This setting can fit as an org file or as multiple
-separate files (manually), either you can choose which one
-to use.
-
-In case it is for separate files you must create a
-directory called "config-lisp-files" in emacs config path.
-
-#+begin_src elisp
 (add-hook 'emacs-startup-hook
           (lambda ()
             (setopt gc-cons-threshold 800000
                     gc-cons-percentage 0.1
                     file-name-handler-alist startup/file-name-handler-alist)))
 
-;;; Store customization file in separate file
-;; (Optional)
-;; (setopt custom-file (concat user-emacs-directory "config-lisp-files/custom.el"))
-;; (load custom-file)
-
-;; Disable theme on Terminal and enable Mouse Support
 (unless (display-graphic-p)
   (xterm-mouse-mode 1)
   (if (eq system-type 'window-nt)
       (disable-theme (car custom-enabled-themes))))
 
-;; For emacs-31
-;;(dolist (content `("whatever/path/" ,user-emacs-directory
-;;                   ,(concat user-emacs-directory "config-lisp-files/")))
-;;  (add-to-list 'trusted-content content))
-
-
-;; The following code shown below is in case you prefer
-;; to use separate files, be careful where you copy.
-;; (let ((configuration-directory (concat user-emacs-directory "config-lisp-files/")))
-;; ;; PACKAGES
-;; (load (concat configuration-directory "packages"))
-
-;; ;; INTERNAL CONFIGURATIONS
-;; (load (concat configuration-directory "internal-configurations"))
-
-;; ;; KEY MAPPINGS
-;; (load (concat configuration-directory "key-mappings"))
-
-;; ;; SYNTAX HIGHLIGHTING
-;; (load (concat configuration-directory "syntax-highlighting"))
-
-;; ;; GUI ENHANCEMENT
-;; (load (concat configuration-directory "tool-bar"))
-;; (load (concat configuration-directory "menu-bar"))
-
-;; ;; MISC
-;; (load (concat configuration-directory "minibuffer"))
-;; (load (concat configuration-directory "ui-enchantment"))
-;; (load (concat configuration-directory "misc"))
-
-;; ;; SYNTAX AND SPELL CHECKING
-;; (load (concat configuration-directory "syntax-checking"))
-;; (load (concat configuration-directory "spell-checking"))
-
-;; ;; WINDOWS AND FRAMES
-;; (load (concat configuration-directory "window-management"))
-
-;; ;; LSP CONFIGURATION
-;; (load (concat configuration-directory "lsp"))
-
-;; ;; FiLE MANAGEMENT
-;; (load (concat configuration-directory "file-management"))
-
-;; ;; COMPLETION
-;; (load (concat configuration-directory "smart-completion"))
-
-;; ;; MODELINE
-;; (load (concat configuration-directory "mode-line"))
-
-;; ;; THEMES
-;; (load (concat configuration-directory "custom-themes"))
-
-;; ;; DASHBOARD
-;; (load (concat configuration-directory "dashboard"))
-
-;; ;; CONFIGURING ORG MODE
-;; (load (concat configuration-directory "org-mode"))
-
-;; ;; CENTAUR TABS
-;; (load (concat configuration-directory "window-tabs"))
-
-;; ;; SNIPPETS
-;; (load (concat configuration-directory "code-snippets"))
-
-;; ;; AUTO-INSERT
-;; (load (concat configuration-directory "auto-insert-templates"))
-
-;; ;; ENABLE LIGATURES
-;; (load (concat configuration-directory "font-ligatures"))
-
-;; ;; START EMACS CLIENT AT STARTING EMACS
-;; (require 'server)
-;; (unless (server-running-p) (server-start))
-
-;; ;; For fix a Woman Error
-;; (savehist-mode t))
-#+end_src
-
-* Package Configuration (packages.el)
-
-#+begin_src elisp
 (use-package package
   :ensure nil
   :custom
@@ -188,11 +58,7 @@ directory called "config-lisp-files" in emacs config path.
 
   ;; (add-to-list 'use-package-keywords :mark-selected t)
   )
-#+end_src
 
-* Some Tweaks into internal options (internal-configurations.el)
-
-#+begin_src elisp
 (use-package emacs
   :ensure nil
   :hook
@@ -305,11 +171,7 @@ directory called "config-lisp-files" in emacs config path.
                            (fill-prefix " *"))
                   (funcall comment-line-break-function nil)
                   t))))
-#+end_src
 
-* Polemic Key Bindings 👀 (key-mappings.el)
-
-#+begin_src elisp
 ;; ╭─────────────────────────────────────────────────────────────────────────────────╮
 ;; │             C    means (press and hold) the 'Control' key                       │
 ;; │             M    means the Meta key (the 'Alt' key, on most keyboards)          │
@@ -350,52 +212,6 @@ directory called "config-lisp-files" in emacs config path.
   :custom
   (mc/always-run-for-all t))
 
-;; (use-package hungry-delete
-;;   :config
-;;   (global-hungry-delete-mode t))
-
-     ;;; OVERRIDE FUNCTIONS
-
-;; (defun my/call-interactively-inhibit-kill-ring (fun &rest args)
-;; (if (interactive-p)
-;; (let ((kill-ring '(""))
-;; (select-enable-clipboard nil))
-;; (call-interactively fun))
-;; (apply fun args)))
-
-;; (advice-add 'kill-word          :around #'my/call-interactively-inhibit-kill-ring)
-;; (advice-add 'kill-whole-line    :around #'my/call-interactively-inhibit-kill-ring)
-;; (advice-add 'backward-kill-word :around #'my/call-interactively-inhibit-kill-ring)
-
-;; Key movements functions
-;;  (defun my/backward-paragraph (&optional n)
-;;    (interactive "^p")
-;;    (let ((n (if (null n) 1 n)))
-;;      (re-search-backward "\\(^\\s-*$\\)\n" nil "NOERROR" n)))
-;;  (advice-add #'backward-paragraph :override #'my/backward-paragraph)
-
-;;  (defun my/forward-paragraph (&optional n)
-;;    (interactive "^p")
-;;    (let ((n (if (null n) 1 n)))
-;;      (re-search-forward "\n\\(^\\s-*$\\)" nil "NOERROR" n)))
-;;  (advice-add #'forward-paragraph :override #'my/forward-paragraph)
-
-;;  (defun beginning-of-line-or-indentation ()
-;;    (interactive "^")
-;;    (if (= (save-excursion (back-to-indentation) (point)) (point))
-;;        (beginning-of-line)
-;;      (back-to-indentation)))
-
-;; Use bind-key to set your bindings
-;; (bind-keys :map your-mode-map
-;; ("<key>" . action))
-
-;; (bind-key "C-y" 'undo-redo cua-global-keymap)
-#+end_src
-
-* Any kind of highlighting (syntax-highlighting.el)
-
-#+begin_src elisp
 (use-package hl-line
   :ensure nil
   :config (global-hl-line-mode t)
@@ -409,12 +225,6 @@ directory called "config-lisp-files" in emacs config path.
           vterm-mode)
          ;; disable hl-line for some modes
          . (lambda () (setq-local global-hl-line-mode nil))))
-
-;; (use-package highlight-thing
-;;   :custom-face
-;;   (highlight-thing ((t (:background unspecified :inherit (lazy-highlight)))))
-;;   :hook ((prog-mode yaml-mode xml-mode mhtml-mode)
-;;          . highlight-thing-mode))
 
 ;;; EXTRA LANGUAGES SYNTAX
 
@@ -527,16 +337,7 @@ directory called "config-lisp-files" in emacs config path.
         ("FIXME" (setq type (intern-soft (concat "hl-todo-flymake-" keyword))))
         (_ (setq type 'hl-todo-flymake)))
       (flymake-make-diagnostic locus beg end type text))))
-#+end_src
 
-* The Use(less/ful) ToolBar (tool-bar.el)
-
-The tool-bar is that feature that almost no one who uses Emacs uses it.
-However, since this is Visual Emacs, we enable it by default.
-
-If you don't want this, you can remove this header.
-
-#+begin_src elisp
 ;;; FUNCTIONS
 ;;;###autoload
 (defun my/run-command ()
@@ -650,13 +451,7 @@ If you don't want this, you can remove this header.
                 :help "Show Settings Buffer"
                 :image (find-image '((:type xpm :file "preferences.xpm"))))
     'dashboard-open))
-#+end_src
 
-* The menu bar (menu-bar.el)
-
-The same goes for this:
-
-#+begin_src elisp
 ;; Extracted from ergoemacs
 (setq-local my/menu-menu--get-major-modes nil)
 
@@ -935,11 +730,7 @@ All other modes are assumed to be minor modes or unimportant.
                     ["Restart Emacs" restart-emacs
                      :help "Kill the current Emacs process and start a new one"]
                     "Quit")
-#+end_src
 
-* Our beloved mini-buffer (minibuffer.el)
-
-#+begin_src elisp
 (use-package marginalia
   :custom
   (marginalia-mode t)
@@ -1036,16 +827,12 @@ All other modes are assumed to be minor modes or unimportant.
           (list "%s" (propertize str 'line-prefix (list 'space :align-to (max 0 (/ (- (window-width (minibuffer-window)) (string-width str)) 2)))))))
     args))
 (advice-add #'message :filter-args #'message-filter-center)
-#+end_src
 
-* Fancy configurations (i think) (ui-enchantment.el)
-
-#+begin_src elisp
 ;;; Font:
-(set-frame-font "JetBrainsMono NF" nil t)
+(set-frame-font "JetBrainsMonoNL Nerd Font Mono" nil t)
 
 ;;; Emoji:
-(if-let* ((font "Segoe UI Emoji")
+(if-let* ((font "Noto Color Emoji")
           ((member font (font-family-list))))
     (set-fontset-font t 'emoji (font-spec :family font) nil 'prepend))
 
@@ -1211,14 +998,14 @@ All other modes are assumed to be minor modes or unimportant.
   :hook ((Custom-mode Info-mode image-mode) . olivetti-mode))
 
 ;;; Enable 'All-the-icons' and 'Nerd-icons'
-(use-package nerd-icons :demand t
-  :custom
-  (nerd-icons-font-family "Inconsolata Nerd Font"))
-(use-package nerd-icons-completion
-  :demand t
-  :hook
-  (marginalia-mode . nerd-icons-completion-marginalia-setup)
-  (after-init . nerd-icons-completion-mode))
+;;(use-package all-the-icons :demand t
+;;  :custom
+;;  (nerd-icons-font-family "JetBrainsMono Nerd Font"))
+;;(use-package nerd-icons-completion
+;;  :demand t
+;;  :hook
+;;  (marginalia-mode . nerd-icons-completion-marginalia-setup)
+;;  (after-init . nerd-icons-completion-mode))
 
 (use-package breadcrumb
   :hook
@@ -1278,11 +1065,7 @@ All other modes are assumed to be minor modes or unimportant.
                           ((string= string "Function")
                            (concat (nerd-icons-codicon "nf-cod-symbol_field" :face 'breadcrumb-imenu-crumbs-face) " " string))
                           (t string)))))))
-#+end_src
 
-* Other packages configurations (misc.el)
-
-#+begin_src elisp
 ;; INSERT NEWLINE IN BRACKETS
 (add-hook 'c-mode-common-hook  #'c-toggle-auto-newline)
 
@@ -1526,38 +1309,6 @@ All other modes are assumed to be minor modes or unimportant.
       :demand t
       :config (consult-compile-multi-mode))))
 
-;; Optionally projectile support
-  ;;; WARNING: OUTDATED, USE AT YOUR OWN RISK
-;; (use-package projectile
-;;   :diminish projectile-mode
-;;   :custom
-;;   (projectile-run-use-comint-mode t)
-;;   (projectile-sort-order 'recentf)
-;;   (projectile-enable-caching (not noninteractive))
-;;   (projectile-require-project-root nil)
-;;   :config
-;;   (dolist (my-list '(".elc" ".pyc" ".o"))
-;;     (add-to-list 'projectile-globally-ignored-file-suffixes my-list))
-
-;;   (dolist (my-list '("^\\.github$"))
-;;     (add-to-list 'projectile-globally-ignored-directories my-list))
-
-;;   (dolist (my-list '(".project"))
-;;     (add-to-list 'projectile-project-root-files-bottom-up my-list))
-
-;;   (projectile-mode t)
-;;   ;; Enable Projectile integration to Consult
-;;   (use-package consult-projectile
-;;     :custom
-;;     (consult-project-function (lambda (_) (projectile-project-root)))
-;;     :config
-;;     ;; Use Consult functions instead Default
-;;     (defalias 'projectile-find-file        #'consult-projectile-find-file)
-;;     (defalias 'projectile-find-dir         #'consult-projectile-find-dir)
-;;     (defalias 'projectile-switch-to-buffer #'consult-projectile-switch-to-buffer)
-;;     (defalias 'projectile-switch-project   #'consult-projectile-switch-project)
-;;     (defalias 'projectile-recentf          #'consult-projectile-recentf)))
-
 (use-package woman
   :ensure nil
   :hook (woman-mode . olivetti-mode)
@@ -1570,11 +1321,7 @@ All other modes are assumed to be minor modes or unimportant.
                    "C:/msys64/share/man"
                    ))
     (add-to-list 'woman-manpath paths)))
-#+end_src
 
-* Flymake (syntax-checking.el)
-
-#+begin_src elisp
 ;;; FLYMAKE
 
 (use-package flymake :ensure nil
@@ -1653,136 +1400,6 @@ All other modes are assumed to be minor modes or unimportant.
   (put 'hl-todo-flymake-FIXME 'face nil)
   (put 'hl-todo-flymake-FIXME 'mode-line-face 'compilation-error))
 
-  ;;; FLYCHECK
-
-;; WARNING: OUTDATED, USE AT YOUR OWN RISK
-;; (use-package flycheck
-;;   :unless (eq system-type 'android)
-;;   :hook
-;;   (prog-mode . flycheck-mode)
-;;   (flycheck-mode . (lambda ()
-;;                      (add-hook 'text-scale-mode-hook
-;;                                #'setup-prog-mode-left-margin 0 t)
-;;                      (add-hook 'window-configuration-change-hook
-;;                                #'setup-prog-mode-left-margin 0 t)))
-;;   (flycheck-error-list-mode . (lambda ()
-;;                                 (if (display-graphic-p)
-;;                                     (text-scale-decrease 1))))
-;;   :custom
-;;   (flycheck-disabled-checkers '(emacs-lisp-checkdoc)) ; Disable Check Doc
-;;   ;; flycheck-temp-prefix ".flycheck" ; Change flycheck temp name
-;;   (flycheck-indication-mode 'left-margin) ; Show indicators in the left margin
-;;   (flycheck-emacs-lisp-load-path 'inherit)
-;;   :preface
-
-;;   (defun flycheck-margin-whitespace (return)
-;;     (concat return
-;;       (propertize " " 'face '(:inherit default :underline nil
-;;       :stipple nil) 'display `((margin left-margin)
-;;       (space :width 5)))))
-;;   (advice-add 'flycheck-make-margin-spec
-;;               :filter-return #'flycheck-margin-whitespace)
-
-;;   ;; DISABLE FLYCHECK CONTINUATION STRINGS OVERRIDING
-;;   (defun my/flycheck-define-error-level (level &rest properties)
-;;     "Funtion Used only for override"
-;;     (declare (indent 1))
-;;     (setf (get level 'flycheck-error-level) t)
-;;     (setf (get level 'flycheck-error-severity)
-;;           (or (plist-get properties :severity) 0))
-;;     (setf (get level 'flycheck-compilation-level)
-;;           (plist-get properties :compilation-level))
-;;     (setf (get level 'flycheck-overlay-category)
-;;           (plist-get properties :overlay-category))
-;;     (setf (get level 'flycheck-fringe-bitmaps)
-;;           (let ((bitmap (plist-get properties :fringe-bitmap)))
-;;             (if (consp bitmap) bitmap (cons bitmap bitmap))))
-;;     (setf (get level 'flycheck-fringe-bitmap-double-arrow)
-;;           (car (get level 'flycheck-fringe-bitmaps)))
-;;     (setf (get level 'flycheck-fringe-face)
-;;           (plist-get properties :fringe-face))
-;;     (setf (get level 'flycheck-margin-spec)
-;;           (or (plist-get properties :margin-spec)
-;;               (flycheck-make-margin-spec
-;;                "" ; Change margin string in lsp diagnostics
-;;                (or (get level 'flycheck-fringe-face) 'default))))
-;;     (setf (get level 'flycheck-error-list-face)
-;;           (plist-get properties :error-list-face)))
-
-;;   (advice-add 'flycheck-define-error-level
-;;               :override #'my/flycheck-define-error-level)
-;;   :config
-;;   ;; Changes to some Flycheck fringes
-;;   (flycheck-define-error-level 'error
-;;     :severity 2
-;;     :compilation-level 2
-;;     :overlay-category 'flycheck-error-overlay
-;;     :fringe-bitmap 'exclamation-mark
-;;     :margin-spec (flycheck-make-margin-spec "" 'error)
-;;     :fringe-face 'error
-;;     :error-list-face 'error)
-;;   (flycheck-define-error-level 'warning
-;;     :severity 1
-;;     :compilation-level 1
-;;     :overlay-category 'flycheck-warning-overlay
-;;     :fringe-bitmap 'exclamation-mark
-;;     :margin-spec (flycheck-make-margin-spec "" 'warning)
-;;     :fringe-face 'warning
-;;     :error-list-face 'warning)
-;;   (flycheck-define-error-level 'info
-;;     :severity 0
-;;     :compilation-level 0
-;;     :overlay-category 'flycheck-info-overlay
-;;     :fringe-bitmap 'question-mark
-;;     :margin-spec (flycheck-make-margin-spec "" 'success)
-;;     :fringe-face 'success
-;;     :error-list-face 'success)
-
-;;   (use-package flycheck-hl-todo
-;;     :after flycheck
-;;     :defer 5
-;;     :hook
-;;     (lsp-managed-mode .
-;;                       (lambda ()
-;;                         (if (derived-mode-p 'c-mode)
-;;                             (setq my/flycheck-local-cache
-;;                                   '((lsp . ((next-checkers . (hl-todo)))))))))
-;;     :preface
-;;     ;; Add Hl-todo checker to LSP
-;;     (setq-local my/flycheck-local-cache nil)
-
-;;     (defun my/flycheck-checker-get (fn checker property)
-;;       (or (alist-get property (alist-get checker my/flycheck-local-cache))
-;;           (funcall fn checker property)))
-;;     ;; Modify icon
-;;     (defun my/flycheck-hl-todo--start (checker callback)
-;;       "Advice Function"
-;;       (funcall
-;;        callback 'finished
-;;        (mapcar (lambda (pos-msg-id)
-;;                  (let ((pos (nth 0 pos-msg-id))
-;;                        (msg (nth 1 pos-msg-id))
-;;                        (id  (nth 2 pos-msg-id)))
-;;                    (flycheck-error-new-at-pos
-;;                     pos 'TODO msg :id id :checker checker)))
-;;                (flycheck-hl-todo--occur-to-error))))
-;;     :config
-;;     (advice-add 'flycheck-checker-get :around 'my/flycheck-checker-get)
-;;     (advice-add 'flycheck-hl-todo--start :override 'my/flycheck-hl-todo--start)
-
-;;     (flycheck-define-error-level 'TODO
-;;       :severity 0
-;;       :compilation-level 0
-;;       :fringe-bitmap 'question-mark
-;;       :margin-spec (flycheck-make-margin-spec "" 'success)
-;;       :fringe-face 'success
-;;       :error-list-face 'success)
-;;     (flycheck-hl-todo-setup)))
-#+end_src
-
-* Writing better (spell-checking.el)
-
-#+begin_src elisp
 (use-package flyspell
   :ensure nil
   :custom
@@ -1797,12 +1414,8 @@ All other modes are assumed to be minor modes or unimportant.
                      ("=" "=") ("~" "~")
                      ("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
     (add-to-list 'ispell-skip-region-alist my-list)))
-#+end_src
 
-* Some Tweaks for windows, frames, etc (window-manegement.el)
-
-#+begin_src elisp
- ;;; DOCUMENTATION IN AN BOX
+;;; DOCUMENTATION IN AN BOX
 
 (use-package eldoc-box
   :if (display-graphic-p)
@@ -1899,27 +1512,6 @@ All other modes are assumed to be minor modes or unimportant.
                           (side . right)))))
                   (apply orig r)))))
 
-;; obsolete in emacs-31...
-;; ;; Kill Buffer, don't hide it
-;; (advice-add #'quit-window :around
-;;             (lambda (orig-fn _ &rest window)
-;;               (funcall orig-fn 't window)))
-;; ... use this instead:
-;; (setopt quit-window-kill-buffer
-;;         '(help-mode
-;;           helpful-mode
-;;           magit-status-mode
-;;           magit-process-mode
-;;           magit-status-mode
-;;           magit-diff-mode
-;;           magit-log-mode
-;;           magit-file-mode
-;;           magit-blob-mode
-;;           magit-blame-mode))
-#+end_src
-
-* EGLOT (lsp.el)
-#+begin_src elisp
 (use-package eglot
   :ensure nil
   :commands eglot
@@ -1970,13 +1562,6 @@ All other modes are assumed to be minor modes or unimportant.
     :custom
     (sideline-eglot-code-actions-prefix " ")
     (sideline-backends-right '((sideline-eglot . up))))
-  ;; Obsolete in emacs-30
-  ;; (use-package eglot-booster
-  ;;   :after eglot
-  ;;   :vc (:url "https://github.com/jdtsmith/eglot-booster" :rev :newest)
-  ;;   :custom
-  ;;   (eglot-booster-mode t)
-  ;;   (eglot-booster-no-remote-boost t))
   )
 
 (use-package dape
@@ -1994,352 +1579,6 @@ All other modes are assumed to be minor modes or unimportant.
      (" restart" . dape-restart) ("󰯇 kill" . dape-kill)
      (" disconnect" . dape-disconnect-quit) ("󰩈 quit" . dape-quit))))
 
-
-;;; LANGUAGE SERVER
-
-;; WARNING: OUTDATED, USE AT YOUR OWN RISK
-;; (use-package lsp-mode
-;;   :disabled t
-;;   :custom
-;;   (lsp-headerline-breadcrumb-enable nil)
-;;   (lsp-keep-workspace-alive nil)
-;;   (lsp-modeline-code-action-fallback-icon "")
-;;   :hook
-;;   (((c-mode      ; clangd ⬎
-;;      c++-mode
-;;      c-ts-mode
-;;      c++-ts-mode
-;;      ;; ---
-;;      python-mode ; pyright
-;;      python-ts-mode
-;;      ;; ---
-;;      lua-mode    ; lua-language-server
-;;      lua-ts-mode
-;;      ;; ---
-;;      mhtml-mode  ; vscode-langservers-extracted ⬎
-;;      html-ts-mode
-;;      css-mode
-;;      css-ts-mode
-;;      ;; ---
-;;      js-mode     ; theia-ide lsp ⬎
-;;      js-ts-mode
-;;      typescript-mode
-;;      typescript-ts-mode
-;;      ;; ---
-;;      markdown-mode ; unified-language-server
-;;      markdown-ts-mode)
-;;     . lsp)
-;;    ;; Lsp hooks
-;;    (lsp-after-initialize
-;;     . (lambda ()
-;;         (local-set-key (kbd "<tool-bar> <mouse-movement>") #'ignore)
-;;         (local-set-key (kbd "<tab-bar> <mouse-movement>")  #'ignore)))
-;;    ;; (lsp-completion-mode
-;;    ;;  . (lambda ()
-;;    ;;      (if lsp-completion-mode
-;;    ;;          (set (make-local-variable 'company-backends)
-;;    ;;               (cons +lsp-company-backends
-;;    ;;                     (remove +lsp-company-backends
-;;    ;;                             (remq 'company-capf company-backends)))))))
-
-;;    (lsp-mode . lsp-enable-which-key-integration)
-;;    (lsp-mode . (lambda ()
-;;                  (interactive)
-;;                  (setq-local read-process-output-max 4194304
-;;                              gc-cons-threshold 100000000
-;;                              context-menu-mode nil))))
-;;   :config
-;;   ;; Do not Cancell ISearch at mouse movement
-;;   (put 'lsp-ui-doc--handle-mouse-movement 'isearch-scroll t) ; LSP
-;;   (put 'dap-tooltip-mouse-motion 'isearch-scroll t) ; DAP
-;;   (put 'handle-switch-frame 'isearch-scroll t)
-
-;;   ;; Display signature in a frame
-;;   (if (display-graphic-p)
-;;       ;; THEN:
-;;       (setopt lsp-signature-function 'lsp-signature-posframe)
-;;     ;; ELSE:
-;;     (setopt lsp-signature-function 'lsp-lv-message))
-
-;;   ;; LSP ICON
-;;   (advice-add #'lsp-icons-get-by-file-ext
-;;               :override #'my-lsp-icons-get-by-file-ext)
-
-;;   ;; LSP BOOSTER
-;;   ;;('REQUIRE:' https://github.com/blahgeek/emacs-lsp-booster)
-;;   (advice-add (if (progn (require 'json)
-;;                          (fboundp 'json-parse-buffer))
-;;                   'json-parse-buffer
-;;                 'json-read)
-;;               :around
-;;               #'lsp-booster--advice-json-parse)
-;;   (advice-add 'lsp-resolve-final-command
-;;               :around #'lsp-booster--advice-final-command)
-
-;;   (use-package sideline-lsp
-;;     :custom
-;;     (lsp-ui-sideline-enable nil)
-;;     (sideline-lsp-code-actions-prefix " ")
-;;     :config
-;;     (add-to-list 'sideline-backends-right '(sideline-lsp . up)))
-;;   :preface
-;;   (setopt lsp-keymap-prefix "C-c l")
-;;   ;; Add Yasnippet to Capf in LSP Completion
-;;   ;; (defvar-local +lsp-company-backends
-;;   ;;     (if (lsp-completion-mode)
-;;   ;;         '(company-paths :separate company-capf :with company-paths company-yasnippet company-files)
-;;   ;;       'company-capf))
-
-;;   ;; LSP BOOSTER FUNCTIONS
-;;   (defun lsp-booster--advice-json-parse (old-fn &rest args)
-;;     "Try to parse bytecode instead of json."
-;;     (or
-;;      (when (equal (following-char) ?#)
-;;        (let ((bytecode (read (current-buffer))))
-;;          (when (byte-code-function-p bytecode)
-;;            (funcall bytecode))))
-;;      (apply old-fn args)))
-
-;;   (defun lsp-booster--advice-final-command (old-fn cmd &optional test?)
-;;     "Prepend emacs-lsp-booster command to lsp CMD."
-;;     (let ((orig-result (funcall old-fn cmd test?)))
-;;       (if (and (not test?)
-;;                (not (file-remote-p default-directory))
-;;                lsp-use-plists
-;;                (not (functionp 'json-rpc-connection))
-;;                (executable-find "emacs-lsp-booster"))
-;;           (progn
-;;             (message "Using emacs-lsp-booster for %s!" orig-result)
-;;             (cons "emacs-lsp-booster" orig-result))
-;;         orig-result)))
-
-;;   (setq-local lsp-symbol-alist
-;;               '((misc          nerd-icons-codicon "nf-cod-symbol_namespace"   :face font-lock-warning-face)
-;;                 (document      nerd-icons-codicon "nf-cod-symbol_file"        :face font-lock-string-face)
-;;                 (namespace     nerd-icons-codicon "nf-cod-symbol_namespace"   :face font-lock-type-face)
-;;                 (string        nerd-icons-codicon "nf-cod-symbol_string"      :face font-lock-doc-face)
-;;                 (boolean-data  nerd-icons-codicon "nf-cod-symbol_boolean"     :face font-lock-builtin-face)
-;;                 (numeric       nerd-icons-codicon "nf-cod-symbol_numeric"     :face font-lock-builtin-face)
-;;                 (method        nerd-icons-codicon "nf-cod-symbol_method"      :face font-lock-function-name-face)
-;;                 (field         nerd-icons-codicon "nf-cod-symbol_field"       :face font-lock-variable-name-face)
-;;                 (localvariable nerd-icons-codicon "nf-cod-symbol_variable"    :face font-lock-variable-name-face)
-;;                 (class         nerd-icons-codicon "nf-cod-symbol_class"       :face font-lock-type-face)
-;;                 (interface     nerd-icons-codicon "nf-cod-symbol_interface"   :face font-lock-type-face)
-;;                 (property      nerd-icons-codicon "nf-cod-symbol_property"    :face font-lock-variable-name-face)
-;;                 (indexer       nerd-icons-codicon "nf-cod-symbol_enum"        :face font-lock-builtin-face)
-;;                 (enumerator    nerd-icons-codicon "nf-cod-symbol_enum"        :face font-lock-builtin-face)
-;;                 (enumitem      nerd-icons-codicon "nf-cod-symbol_enum_member" :face font-lock-builtin-face)
-;;                 (constant      nerd-icons-codicon "nf-cod-symbol_constant"    :face font-lock-constant-face)
-;;                 (structure     nerd-icons-codicon "nf-cod-symbol_structure"   :face font-lock-variable-name-face)
-;;                 (event         nerd-icons-codicon "nf-cod-symbol_event"       :face font-lock-warning-face)
-;;                 (operator      nerd-icons-codicon "nf-cod-symbol_operator"    :face font-lock-comment-delimiter-face)
-;;                 (template      nerd-icons-codicon "nf-cod-symbol_snippet"     :face font-lock-type-face)))
-
-;;   ;; Header line file icons
-;;   (defun my-lsp-icons-get-by-file-ext (file-ext &optional feature)
-;;     (if (and file-ext
-;;              (lsp-icons--enabled-for-feature feature))
-;;         (nerd-icons-icon-for-extension file-ext)))
-
-;;   ;; Header line symbols icon
-;;   ;; (defun my-lsp-icons-get-by-symbol-kind (kind &optional feature)
-;;   ;; (when (and kind
-;;   ;; (lsp-icons--enabled-for-feature feature))
-;;   ;; (let* ((icon (cdr (assoc (lsp-treemacs-symbol-kind->icon kind) lsp-symbol-alist)))
-;;   ;; (args (cdr icon)))
-;;   ;; (apply (car icon) args))))
-;;   ;; (advice-add #'lsp-icons-get-by-symbol-kind :override #'my-lsp-icons-get-by-symbol-kind)
-;;   )
-
-  ;;; INTEGRATE LSP PYRIGHT
-;; (use-package lsp-pyright :demand t)
-
-  ;;; INTEGRATE LSP UI
-;; (use-package lsp-ui
-;;   :after lsp-mode
-;;   :hook
-;;   (lsp-ui-imenu-mode
-;;    . (lambda () (interactive) (setq-local truncate-lines t))))
-
-;; `lsp-mode' and `treemacs' integration
-;; (use-package lsp-treemacs
-;;   :after lsp-mode
-;;   :bind (:map lsp-mode-map
-;;               ("C-<f8>" . lsp-treemacs-errors-list)
-;;               ("M-<f8>" . lsp-treemacs-symbols)
-;;               ("s-<f8>" . lsp-treemacs-java-deps-list))
-;;   :config
-;;   (lsp-treemacs-sync-mode t)
-
-;;   (with-no-warnings
-;;     (treemacs-create-theme "lsp-nerd-icons"
-;;       :config
-;;       (progn
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-repo" :face 'nerd-icons-blue))
-;;          :extensions (root))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_boolean" :face 'nerd-icons-lblue))
-;;          :extensions (boolean-data))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_class" :face 'nerd-icons-orange))
-;;          :extensions (class))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_color"))
-;;          :extensions (color-palette))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_constant"))
-;;          :extensions (constant))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_file"))
-;;          :extensions (document))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_misc" :face 'nerd-icons-orange))
-;;          :extensions (enumerator))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_enum_member" :face 'nerd-icons-lblue))
-;;          :extensions (enumitem))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_event" :face 'nerd-icons-orange))
-;;          :extensions (event))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_field" :face 'nerd-icons-lblue))
-;;          :extensions (field))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_misc"))
-;;          :extensions (indexer))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_keyword"))
-;;          :extensions (intellisense-keyword))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_interface" :face 'nerd-icons-lblue))
-;;          :extensions (interface))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_variable" :face 'nerd-icons-lblue))
-;;          :extensions (localvariable))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_method" :face 'nerd-icons-purple))
-;;          :extensions (method))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_namespace" :face 'nerd-icons-lblue))
-;;          :extensions (namespace))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_numeric"))
-;;          :extensions (numeric))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_operator"))
-;;          :extensions (operator))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_property"))
-;;          :extensions (property))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_snippet"))
-;;          :extensions (snippet))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_string"))
-;;          :extensions (string))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_structure" :face 'nerd-icons-orange))
-;;          :extensions (structure))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_snippet"))
-;;          :extensions (template))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-chevron_right" :face 'nerd-icons-dsilver))
-;;          :extensions (collapsed) :fallback "+")
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-chevron_down" :face 'nerd-icons-dsilver))
-;;          :extensions (expanded) :fallback "-")
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-file_binary" :face 'nerd-icons-dsilver))
-;;          :extensions (classfile))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder_opened" :face 'nerd-icons-blue))
-;;          :extensions (default-folder-opened))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder" :face 'nerd-icons-blue))
-;;          :extensions (default-folder))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder_opened" :face 'nerd-icons-green))
-;;          :extensions (default-root-folder-opened))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder" :face 'nerd-icons-green))
-;;          :extensions (default-root-folder))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-file_binary" :face 'nerd-icons-dsilver))
-;;          :extensions ("class"))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-file_zip" :face 'nerd-icons-dsilver))
-;;          :extensions (file-type-jar))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder_opened" :face 'nerd-icons-dsilver))
-;;          :extensions (folder-open))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder" :face 'nerd-icons-dsilver))
-;;          :extensions (folder))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder_opened" :face 'nerd-icons-orange))
-;;          :extensions (folder-type-component-opened))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder" :face 'nerd-icons-orange))
-;;          :extensions (folder-type-component))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder_opened" :face 'nerd-icons-green))
-;;          :extensions (folder-type-library-opened))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder" :face 'nerd-icons-green))
-;;          :extensions (folder-type-library))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder_opened" :face 'nerd-icons-pink))
-;;          :extensions (folder-type-maven-opened))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder" :face 'nerd-icons-pink))
-;;          :extensions (folder-type-maven))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder_opened" :face 'nerd-icons-orange))
-;;          :extensions (folder-type-package-opened))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder" :face 'nerd-icons-orange))
-;;          :extensions (folder-type-package))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-add" :face 'nerd-icons-dsilver))
-;;          :extensions (icon-create))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-list_flat" :face 'nerd-icons-dsilver))
-;;          :extensions (icon-flat))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-symbol_class" :face 'nerd-icons-blue))
-;;          :extensions (icon-hierarchical))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-link" :face 'nerd-icons-dsilver))
-;;          :extensions (icon-link))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-refresh" :face 'nerd-icons-dsilver))
-;;          :extensions (icon-refresh))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-faicon "nf-fa-unlink" :face 'nerd-icons-dsilver))
-;;          :extensions (icon-unlink))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-devicon "nf-dev-java" :face 'nerd-icons-orange))
-;;          :extensions (jar))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-library" :face 'nerd-icons-green))
-;;          :extensions (library))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder_opened" :face 'nerd-icons-lblue))
-;;          :extensions (packagefolder-open))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-folder" :face 'nerd-icons-lblue))
-;;          :extensions (packagefolder))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-archive" :face 'nerd-icons-dsilver))
-;;          :extensions (package))
-;;         (treemacs-create-icon
-;;          :icon (format "%s " (nerd-icons-codicon "nf-cod-repo" :face 'nerd-icons-blue))
-;;          :extensions (java-project))))))
-#+end_src
-* Dired, Treemacs and more (file-management.el)
-#+begin_src elisp
 ;; Define which file manager use
 ;; (e.g 'treemacs' or 'dirvish-side').
 (defalias 'my/explorer-open 'treemacs)
@@ -2448,11 +1687,8 @@ All other modes are assumed to be minor modes or unimportant.
     (defun treemacs--propagate-new-icons (_theme))
     :custom-face (cfrs-border-color ((t (:inherit posframe-border))))
     :config (treemacs-load-theme "nerd-icons")))
-#+end_src
 
-* Make completion better (and fancy) (smart-completion.el)
-#+begin_src elisp
- ;;; ORDERLESS COMPLETION
+;;; ORDERLESS COMPLETION
 
 (use-package orderless
   :custom
@@ -2545,75 +1781,6 @@ All other modes are assumed to be minor modes or unimportant.
   :config
   (use-package yasnippet-capf))
 
-     ;;; Company
-;; WARNING: OUTDATED, USE IT AT YOUR OWN RISK
-
-;; (use-package company
-;;   :disabled
-;;   :demand t
-;;   :hook ((eshell-mode shell-mode) . (lambda () (company-mode -1)))
-;;   :custom
-;;   (global-company-mode t)
-;;   (company-backends
-;;    '(company-paths (company-capf :with company-yasnippet) company-cmake
-;;                     company-files
-;;                     (company-dabbrev-code company-gtags company-etags
-;;                                           company-keywords)
-;;                     company-dabbrev))
-;;   (company-transformers '(my/company-sort-yas-first))
-;;   (company-frontends ; always show candidates in overlay tooltip
-;;    '(company-pseudo-tooltip-frontend
-;;      company-preview-frontend))
-;;   :config
-;;   (advice-add 'company-yasnippet--candidates :around #'my/wrap--company-yasnippet--candidates)
-
-;;   ;; Delete Company Cmake
-;;   (setopt company-backends (delete 'company-cmake company-backends))
-
-;;   (use-package company-paths
-;;     :vc (:url "https://github.com/emacs-vs/company-paths" :rev :newest))
-
-;; ;;; COMPANY UI (ONLY GUI)
-;;   (use-package company-box
-;;     :if (display-graphic-p)
-;;     :hook (company-mode . company-box-mode)
-;;     :custom
-;;     (company-box-frame-behavior 'point)
-;;     (company-box-icons-alist 'company-box-icons-idea)
-;;     (company-box-scrollbar 'right)
-;;     (company-box-show-single-candidate 'always)
-;;     (company-format-margin-function 'company-text-icons-margin)
-;;     (company-idle-delay 0)
-;;     (company-minimum-prefix-length 2)
-;;     (company-quickhelp-delay 0.1)
-;;     (company-require-match nil)
-;;     (company-text-face-extra-attributes '(:weight bold :slant italic))
-;;     (company-tooltip-align-annotations t)
-;;     (company-tooltip-limit 14)
-;;     (company-tooltip-minimum-width 50)
-;;     (company-box-backends-colors nil)
-;;     (company-box-max-candidates 50)
-;;     :config
-;;     (add-to-list 'company-box-frame-parameters '(tab-bar-lines . 0)))
-;;   :preface
-;;   (defun my/wrap--company-yasnippet--candidates (orig-fun &rest args)
-;;     "Wrapper for `company-yasnippet--candidates'.
-;;   For some reason, the yasnippet backend also provides completion if the prefix
-;;   is empty.  This gives yasnippet completion everytime and makes completion
-;;   often a burden."
-;;     (if (and (stringp (car args)) (string-blank-p (car args)))
-;;         nil
-;;       (apply orig-fun args)))
-
-;;   (defun my/company-sort-yas-first (candidates)
-;;     (sort candidates
-;;           (lambda (c1 _c2)
-;;             (equal (get-text-property 0 'company-backend c1) 'company-yasnippet)))
-;;     candidates))
-#+end_src
-
-* The modeline (mode-line.el)
-#+begin_src elisp
 (use-package minions
   :hook (doom-modeline-mode . minions-mode))
 
@@ -2655,10 +1822,7 @@ All other modes are assumed to be minor modes or unimportant.
     '(misc-info major-mode))
 
   (add-to-list 'doom-modeline-mode-alist '(dashboard-mode)))
-#+end_src
 
-* +eMacs+ Emacs Themes (custom-themes.el)
-#+begin_src elisp
 ;;; SOLAIRE DISTINGUISH "REAL" BUFFERS FROM "UNREAL" BUFFERS
 
 (use-package solaire-mode
@@ -2670,14 +1834,6 @@ All other modes are assumed to be minor modes or unimportant.
                '(treemacs-window-background-face . solaire-default-face))
   (solaire-global-mode t))
 
-;;; INSTALL THEMES
-
-;; (use-package catppuccin-theme
-;;     :config
-;;     (catppuccin-reload)
-;;     ;; Flash ModeLine at errors
-;;     (use-package mode-line-bell
-;;         :config (mode-line-bell-mode t)))
 
 (use-package doom-themes
   :custom-face
@@ -2690,26 +1846,23 @@ All other modes are assumed to be minor modes or unimportant.
   ;; (doom-themes-org-config)
   )
 
-(use-package vscode-dark-plus-theme) ; Broken (?)
+;;(use-package vscode-dark-plus-theme) ; Broken (?)
 
-(load-theme 'doom-dark+ t)
-(ignore-errors (load-theme 'vscode-dark-plus t)) ; Broken (?)
+;;(load-theme 'doom-dark+ t)
+;;(ignore-errors (load-theme 'vscode-dark-plus t)) ; Broken (?)
 
 ;;; Faces
 (set-face-attribute 'corfu-default nil :inherit 'default)
 (set-face-attribute 'corfu-popupinfo nil :inherit 'default)
 (set-face-attribute 'header-line nil :inherit 'centaur-tabs-default)
-(set-face-attribute 'mode-line nil :background nil)
-(set-face-attribute 'mode-line nil :inherit 'cursor)
+;;(set-face-attribute 'mode-line nil :background nil)
+;;(set-face-attribute 'mode-line nil :inherit 'cursor)
 (set-face-attribute 'show-paren-match nil :box '(-1 . -1))
 (set-face-attribute 'show-paren-match nil :foreground 'unspecified)
 (set-face-attribute 'custom-group-tag nil :height 1.2)
 (set-face-attribute 'region nil :extend nil)
 (set-face-attribute 'font-lock-comment-face nil :slant 'italic)
-#+end_src
 
-* A nice dashboard at startup (dashboard.el)
-#+begin_src elisp
 (use-package dashboard
   :hook
   (window-configuration-change
@@ -2811,10 +1964,7 @@ All other modes are assumed to be minor modes or unimportant.
          "Open settings"   ; Description
          (lambda (&rest _) (customize))
          (:inverse-video t :inherit dashboard-navigator) ,l ,r))))))
-#+end_src
 
-* ORG (org-mode.el)
-#+begin_src elisp
 (use-package org
   :ensure nil
   :hook
@@ -2856,10 +2006,7 @@ All other modes are assumed to be minor modes or unimportant.
     (org-modern-star
      '(" " "󰎥 " "󰎨 " "󰎫" "󰎲 " "󰎯 " "󰎴 " "󰎷 " "󰎺 " "󰎽 " "󰏀 "))
     (global-org-modern-mode t)))
-#+end_src
 
-* Windows tabs (windows-tabs.el)
-#+begin_src elisp
 (use-package centaur-tabs
   :hook (emacs-startup . centaur-tabs-mode)
   :custom
@@ -2953,10 +2100,7 @@ All other modes are assumed to be minor modes or unimportant.
     (centaur-tabs-display-update)
     (centaur-tabs-headline-match))
   (advice-add #'load-theme :after #'run-after-load-theme-hook))
-#+end_src
 
-* Snippets (code-snippets.el)
-#+begin_src elisp
 (use-package yasnippet
   :diminish yas-minor-mode
   :hook (after-init . yas-global-mode)
@@ -2964,10 +2108,7 @@ All other modes are assumed to be minor modes or unimportant.
   ;; Collection of snippets
   (use-package yasnippet-snippets
     :after yasnippet))
-#+end_src
 
-* File Templates powered with yasnippet (auto-insert-templates.el)
-#+begin_src elisp
 ;; Enable Auto-insert mode for File Templates
 (use-package autoinsert
   :ensure nil
@@ -2986,10 +2127,7 @@ All other modes are assumed to be minor modes or unimportant.
   ;; (define-auto-insert "compile_flags.txt"
   ;; ["compile_flags-auto-insert" my-autoinsert-yas-expand])
   )
-#+end_src
 
-* Ligatures (Is this necessary?) (ligatures.el)
-#+begin_src elisp
 (use-package ligature
   :if (display-graphic-p)
   :config
@@ -3014,21 +2152,7 @@ All other modes are assumed to be minor modes or unimportant.
 
 
 (provide 'ligatures-config)
-#+end_src
 
-* The Great GNUS (.gnus)
-
-In case that you want to use GNUS for mailing or as RSS Reader the
-configuration below can be useful to you.
-
-NOTE: THIS CONFIGURATION IS ONLY INTENDED FOR GMAIL USERS.
-See this article for more information:
-https://gist.github.com/BonfaceKilz/726a1f2c06f15372c2df91fd64895bf9
-
-Make sure =.authinfo.gpg= (and optionally =.signature=) exists,
-also the =EMAIL= Environment variable must be set.
-
-#+begin_src elisp
 (use-package gnus
   :ensure nil
   :commands gnus
@@ -3047,7 +2171,7 @@ also the =EMAIL= Environment variable must be set.
   :config
   ;; @see http://gnus.org/manual/gnus_397.html
   (add-to-list 'gnus-secondary-select-methods
-               '(nnimap "gmail"
+	       '(nnimap "gmail"
                         (nnimap-address "imap.gmail.com")
                         (nnimap-server-port 993)
                         (nnimap-stream ssl)
@@ -3056,4 +2180,3 @@ also the =EMAIL= Environment variable must be set.
                         ;; press `E' to expire email
                         (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")
                         (nnmail-expiry-wait 90))))
-#+end_src

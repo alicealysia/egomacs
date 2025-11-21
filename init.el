@@ -25,8 +25,7 @@
   (load-theme 'catppuccin t))
 
 (package-initialize)
-(org-babel-load-file (concat user-emacs-directory "README.org"))
-
+(load-file "~/.emacs.d/vmacs.el")
 ;;; init.el ends here
 ;;--------------------------------------------------------------------------------
 (custom-set-variables
@@ -40,6 +39,8 @@
      default))
  '(nil nil t))
 (global-set-key [tab-line drag-mouse-1] #'mouse-drag-tab-line)
+(use-package popwin)
+(popwin-mode 1)
 ;; tab killer
 (define-advice tab-line-close-tab (:override (&optional e))
   "Close the selected tab."
@@ -90,8 +91,11 @@
 (ergoemacs-global-set-key (kbd "C-S-b") 'treemacs)
 ;;(setq-default cursor-type 'bar)
 (define-key ergoemacs-user-keymap (kbd "C-/") 'ergoemacs-comment-dwim)
+(define-key ergoemacs-user-keymap (kbd "C-f") 'consult-line)
 (ergoemacs-global-set-key (kbd "C-c") 'ergoemacs-copy-line-or-region)
 (ergoemacs-global-set-key (kbd "C-S-p") 'execute-extended-command)
+(ergoemacs-global-set-key (kbd "C-M-<up>") 'mc/mmlte--up)
+(ergoemacs-global-set-key (kbd "C-M-<down>") 'mc/mmlte--down)
 (ergoemacs-mode 1)
 (use-package ultra-scroll
 					;:vc (:url "https://github.com/jdtsmith/ultra-scroll") ; if desired (emacs>=v30)
@@ -190,6 +194,6 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(eww-form-checkbox ((t (:background "lightgrey" :foreground "black" :box (:line-width (2 . 2) :style flat-button)))))
  '(mode-line-highlight ((t nil))))
+
 
