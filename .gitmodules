@@ -1,3 +1,6 @@
 [submodule "on-demand-scroll-bar"]
 	path = on-demand-scroll-bar
 	url = https://github.com/florommel/on-demand-scroll-bar
+[submodule "auto-side-windows"]
+	path = auto-side-windows
+	url = https://github.com/MArpogaus/auto-side-windows

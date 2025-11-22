@@ -26,7 +26,7 @@
 
 (package-initialize)
 (load-file "~/.emacs.d/vmacs.el")
-;;; init.el ends here
+;;; init.el ends her
 ;;--------------------------------------------------------------------------------
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -38,10 +38,61 @@
      "aec7b55f2a13307a55517fdf08438863d694550565dee23181d2ebd973ebd6b8"
      default))
  '(nil nil t))
-(global-set-key [tab-line drag-mouse-1] #'mouse-drag-tab-line)
-(use-package popwin)
-(popwin-mode 1)
 (scroll-bar-mode -1)
+(use-package auto-side-windows
+  :load-path "~/.emacs.d/auto-side-windows/"
+  :custom
+  (switch-to-buffer-obey-display-actions t)
+  (auto-side-windows-top-buffer-modes '(locate-mode
+					occur-mode
+					grep-mode
+					xref--xref-buffer-mode))
+  (auto-side-windows-left-buffer-names
+   '("^\\*Treemacs.*$"
+     "^\\*Packages\\*$"
+     "^\\*Buffer List\\*$"))
+  (auto-side-windows-right-buffer-names
+   '("^\\*eldoc.*\\*$"
+     "^\\*info\\*$"
+     "^\\*Metahelp\\*$"
+     "^\\*Process List\\*$"
+     "^\\*Multiple Choice Help\\*$"
+     "^\\*Quick Help\\*$"
+     "^\\*TeX Help\\*$"))
+  (auto-side-windows-right-buffer-modes
+   '(Info-mode
+     TeX-output-mode
+     eldoc-mode
+     help-mode
+     helpful-mode
+     shortdoc-mode))
+  (auto-side-windows-bottom-buffer-names
+   '("^\\*eshell\\*$"
+     "^\\*shell\\*$"
+     "^\\*term\\*$"
+     "^\\*Backtrace\\*$"
+     "^\\*Async-native-compile-log\\*$"
+     "^\\*Compile-Log\\*$"
+     "^\\*TeX errors\\*$"
+     "^\\*Warnings\\*$"
+     "^\\*Messages\\*$"))
+  (auto-side-windows-bottom-buffer-modes
+   '(eshell-mode
+     shell-mode
+     term-mode
+     comint-mode
+     debugger-mode
+     flymake-diagnostics-buffer-mode))
+  (window-sides-slots '(1 1 1 1))
+  (window-sides-vertical t)
+  (window-persistent-parameters
+   (append window-persistent-parameters
+           '((tab-line-format . t)
+             (header-line-format . t)
+             (mode-line-format . t))))
+  :hook
+  (after-init . auto-side-windows-mode)
+  )
 ;; tab killer
 (define-advice tab-line-close-tab (:override (&optional e))
   "Close the selected tab."
@@ -49,31 +100,10 @@
   (let* (
 	 (posnp (event-start e))
 	 (window (posn-window posnp))
-	 (buffer (get-pos-property 1 'tab (car (posn-string posnp))))
 	 )
     (with-selected-window window
-      (let ((tab-list (tab-line-tabs-window-buffers))
-	    (buffer-list
-	     (flatten-list
-	      (seq-reduce (lambda (list window)
-			    (select-window window t)
-                            (cons (tab-line-tabs-window-buffers) list))
-                          (window-list) nil))
-	     )
-	    )
-        (select-window window)
-        (if (> (seq-count (lambda (b) (eq b buffer)) buffer-list) 1)
-            (progn
-              (if (eq buffer (current-buffer))
-                  (bury-buffer)
-                (set-window-prev-buffers window (assq-delete-all buffer (window-prev-buffers)))
-                (set-window-next-buffers window (delq buffer (window-next-buffers))))
-              (unless (cdr tab-list)
-                (ignore-errors (delete-window window))))
-          (and (kill-buffer buffer)
-	       (unless (cdr tab-list)
-		 (ignore-errors (delete-window window))))))
-      )
+      (if (length> (centaur-tabs-current-tabset) 1)
+	  (ignore-errors (delete-window window))))
     (force-mode-line-update)
     )
   )
@@ -157,7 +187,6 @@
       (setq start (line-beginning-position)) ; save the start of the line
       (goto-char regionEnd) ; go to the end of region
       (setq end (line-end-position)) ; save the end of the line
-      
       (indent-rigidly start end numSpaces) ; indent between start and end
       (setq deactivate-mark nil) ; restore the selected region
       )
