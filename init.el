@@ -48,7 +48,8 @@
 					grep-mode
 					xref--xref-buffer-mode))
   (auto-side-windows-left-buffer-names
-   '("^\\*Treemacs.*$"
+   '("^\\*Treemacs-Buffer-.*$"
+     "^\\*vc-change-log\\*$"
      "^\\*Packages\\*$"
      "^\\*Buffer List\\*$"))
   (auto-side-windows-right-buffer-names
@@ -92,20 +93,6 @@
              (mode-line-format . t))))
   :hook
   (after-init . auto-side-windows-mode)
-  )
-;; tab killer
-(define-advice tab-line-close-tab (:override (&optional e))
-  "Close the selected tab."
-  (interactive "e")
-  (let* (
-	 (posnp (event-start e))
-	 (window (posn-window posnp))
-	 )
-    (with-selected-window window
-      (if (length> (centaur-tabs-current-tabset) 1)
-	  (ignore-errors (delete-window window))))
-    (force-mode-line-update)
-    )
   )
 
 (use-package minimap
